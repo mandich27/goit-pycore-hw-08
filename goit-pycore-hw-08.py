@@ -31,6 +31,7 @@ class Birthday(Field):
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
         super().__init__(value)
+
     def is_valid(self):
         try:
             b_date = datetime.strptime(self.value, '%d.%m.%Y')
