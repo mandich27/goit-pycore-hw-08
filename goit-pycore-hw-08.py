@@ -26,13 +26,11 @@ class Phone(Field):
 
 class Birthday(Field):
     def __init__(self, value):
-        super().__init__(value)
         try:
-            b_date = datetime.strptime(value, '%d.%m.%Y')
-            self.value = value
+            datetime.strptime(value, '%d.%m.%Y')
         except ValueError:
             raise ValueError("Invalid date format. Use DD.MM.YYYY")
-
+        super().__init__(value)
     def is_valid(self):
         try:
             b_date = datetime.strptime(self.value, '%d.%m.%Y')
@@ -92,9 +90,9 @@ class AddressBook(UserDict):
     def delete(self, name):
         if name in self.data:
             del self.data[name]
-            print(f'Contact {name} deleted')
+            return f'Contact {name} deleted'
         else:
-            print(f'Contact {name} not found')
+            return f'Contact {name} not found'
 
     def get_upcoming_birthdays(self):
         today = datetime.now().date()
@@ -116,6 +114,10 @@ class AddressBook(UserDict):
         for record in self.data.values():
             result.append(str(record))
         return '\n'.join(result)
+
+def delete(args, book):
+    name = args[0]
+    return book.delete(name)
 
 #----------------------------------------------------------------
 
@@ -256,6 +258,8 @@ def main():
                 continue
             for day in birthdays:
                 print(f"{day}")
+        elif command == "delete":
+            print(delete(args, book=book))
         else:
             print("Invalid command")
 
